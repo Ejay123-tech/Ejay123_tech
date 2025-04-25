@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee Rust Detector</title>
+</head>
+<body>
+    <h1>Upload a Coffee Leaf Image</h1>
+    
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" id="leafImage" name="file" accept="image/*">
+        <button type="submit">Detect</button>
+    </form>
+    
+    <h2 id="result"></h2>
+
+    <script>
+        const form = document.getElementById('uploadForm');
+        const resultElement = document.getElementById('result');
+
+        form.onsubmit = async (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+            const response = await fetch('/predict', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+            
+            if (data.result) {
+                resultElement.innerText = data.result;
+            } else {
+                resultElement.innerText = data.error;
+            }
+        }
+    </script>
+</body>
+</html>
+
